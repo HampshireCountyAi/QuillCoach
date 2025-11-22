@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScholarshipIQ - AI-Powered Application Optimizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:wght@400;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2D5F8D;
+            --primary-light: #4A8FBD;
+            --accent: #E67E22;
+            --accent-light: #F39C12;
+            --success: #27AE60;
+            --bg-main: #F8F9FA;
+            --bg-card: #FFFFFF;
+            --text-primary: #2C3E50;
+            --text-secondary: #7F8C8D;
+            --border: #E1E8ED;
+        }
+
+        .dark {
+            --primary: #4A8FBD;
+            --primary-light: #6BA5CD;
+            --accent: #F39C12;
+            --accent-light: #F1C40F;
+            --success: #2ECC71;
+            --bg-main: #1A1F2E;
+            --bg-card: #242938;
+            --text-primary: #E8EAF0;
+            --text-secondary: #A0A7B8;
+            --border: #2D3548;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Crimson Pro', serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .mono {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .app-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--bg-main) 0%, color-mix(in srgb, var(--primary) 5%, var(--bg-main)) 100%);
+        }
+
+        .header {
+            background: var(--bg-card);
+            border-bottom: 3px solid var(--accent);
+            padding: 1.5rem 1rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        .dark .header {
+            box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+        }
+
+        .logo-text {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+
+        .tab-container {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1.5rem auto;
+            max-width: 1200px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
+
+        .tab:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 30%, transparent);
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            font-family: 'Work Sans', sans-serif;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-family: 'Work Sans', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 30%, transparent);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px color-mix(in srgb, var(--primary) 40%, transparent);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--bg-main);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .result-box {
+            background: var(--bg-main);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .result-box h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .insight-tag {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin: 0.25rem;
+            font-weight: 600;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comparison-box {
+            background: var(--bg-main);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 2px solid var(--border);
+        }
+
+        .comparison-box.before {
+            border-left: 4px solid #E74C3C;
+        }
+
+        .comparison-box.after {
+            border-left: 4px solid var(--success);
+        }
+
+        .comparison-label {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .comparison-box.before .comparison-label {
+            color: #E74C3C;
+        }
+
+        .comparison-box.after .comparison-label {
+            color: var(--success);
+        }
+
+        .alert {
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid;
+            background: var(--bg-main);
+        }
+
+        .alert-info {
+            border-color: var(--primary);
+            color: var(--text-primary);
+        }
+
+        .alert-warning {
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+
+        .alert-success {
+            border-color: var(--success);
+            color: var(--text-primary);
+        }
+
+        .verification-box {
+            background: color-mix(in srgb, var(--accent) 10%, var(--bg-main));
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .verification-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--border);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-weight: 700;
+            font-family: 'Space Mono', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-number {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 30%, transparent);
+        }
+
+        .step.completed .step-number {
+            background: var(--success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .step.active .step-label {
+            color: var(--primary);
+        }
+
+        .prose {
+            line-height: 1.8;
+        }
+
+        .prose p {
+            margin-bottom: 1rem;
+        }
+
+        .prose strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .max-width-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .badge-primary {
+            background: color-mix(in srgb, var(--primary) 20%, transparent);
+            color: var(--primary);
+        }
+
+        .badge-success {
+            background: color-mix(in srgb, var(--success) 20%, transparent);
+            color: var(--success);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Custom Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: flex-end;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="max-width-container">
+                <h1 class="logo-text">ScholarshipIQ</h1>
+                <p class="tagline mono">AI-Powered Adaptive Application System</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-width-container">
+            <!-- Tab Navigation -->
+            <div class="tab-container">
+                <button class="tab active" onclick="switchTab('intelligence')">
+                    <span class="mono">01.</span> Scholarship Intelligence
+                </button>
+                <button class="tab" onclick="switchTab('student')">
+                    <span class="mono">02.</span> Student Profile
+                </button>
+                <button class="tab" onclick="switchTab('generator')">
+                    <span class="mono">03.</span> Essay Generator
+                </button>
+                <button class="tab" onclick="switchTab('comparison')">
+                    <span class="mono">04.</span> Comparative Analysis
+                </button>
+            </div>
+
+            <!-- Phase 1: Scholarship Intelligence -->
+            <div id="intelligence" class="content-section active">
+                <div class="card">
+                    <h2 style="margin-bottom: 1.5rem;">Organizational Intelligence Analysis</h2>
+
+                    <div class="alert alert-info">
+                        <strong>Strategic Advantage:</strong> We analyze not just the scholarship criteria, but the organization's future trajectory, leadership vision, and strategic priorities to position your application where they're headed, not where they've been.
+                    </div>
+
+                    <div class="input-group">
+                        <label for="scholarshipName">Scholarship Name *</label>
+                        <input type="text" id="scholarshipName" placeholder="e.g., Gates Millennium Scholarship" >
+                    </div>
+
+                    <div class="input-group">
+                        <label for="organizationName">Organization Name *</label>
+                        <input type="text" id="organizationName" placeholder="e.g., Bill & Melinda Gates Foundation" >
+                    </div>
+
+                    <div class="input-group">
+                        <label for="scholarshipDescription">Scholarship Description / Criteria</label>
+                        <textarea id="scholarshipDescription" placeholder="Paste the scholarship description, eligibility criteria, and any additional information..."></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="scholarshipUrl">Scholarship Website URL (Optional)</label>
+                        <input type="url" id="scholarshipUrl" placeholder="https://..." >
+                    </div>
+
+                    <button class="btn btn-primary" onclick="analyzeScholarship()" id="analyzeBtn">
+                        <span id="analyzeBtnText">🔍 Analyze Organization</span>
+                        <span id="analyzeBtnLoader" style="display: none;" class="loading"></span>
+                    </button>
+
+                    <div id="intelligenceResults" style="display: none;">
+                        <div class="result-box">
+                            <h3>📊 Organizational Intelligence Report</h3>
+                            <div id="intelligenceContent" class="prose"></div>
+                        </div>
+
+                        <div class="result-box" style="margin-top: 1rem;">
+                            <h3>🎯 Strategic Priorities & Trajectory</h3>
+                            <div id="prioritiesContent" class="prose"></div>
+                        </div>
+
+                        <div class="result-box" style="margin-top: 1rem;">
+                            <h3>💡 Key Messaging Insights</h3>
+                            <div id="messagingContent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 2: Student Profile -->
+            <div id="student" class="content-section">
+                <div class="card">
+                    <h2 style="margin-bottom: 1.5rem;">Authentic Value Extraction</h2>
+
+                    <div class="alert alert-warning">
+                        <strong>Our Philosophy:</strong> We help you recognize and articulate your authentic value. We'll identify qualities you may be minimizing, reframe them strategically, and verify everything with you to ensure complete honesty.
+                    </div>
+
+                    <div class="step-indicator">
+                        <div class="step active" id="step1">
+                            <div class="step-number">1</div>
+                            <div class="step-label">Share Experiences</div>
+                        </div>
+                        <div class="step" id="step2">
+                            <div class="step-number">2</div>
+                            <div class="step-label">Value Detection</div>
+                        </div>
+                        <div class="step" id="step3">
+                            <div class="step-number">3</div>
+                            <div class="step-label">Verify & Refine</div>
+                        </div>
+                    </div>
+
+                    <div id="studentStep1">
+                        <div class="input-group">
+                            <label for="studentName">Your Name</label>
+                            <input type="text" id="studentName" placeholder="Your full name" >
+                        </div>
+
+                        <div class="input-group">
+                            <label for="academicInfo">Academic Background</label>
+                            <textarea id="academicInfo" placeholder="Describe your academic achievements, GPA, test scores, relevant coursework, academic awards..."></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="extracurriculars">Extracurricular Activities & Leadership</label>
+                            <textarea id="extracurriculars" placeholder="Describe your involvement in clubs, sports, student government, volunteer work, leadership roles. Don't hold back - include everything you've done, even if it seems small..."></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="achievements">Special Achievements & Projects</label>
+                            <textarea id="achievements" placeholder="Any special projects, competitions, awards, research, creative work, or other achievements..."></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="challenges">Personal Challenges & Growth</label>
+                            <textarea id="challenges" placeholder="Any obstacles you've overcome, personal growth experiences, or unique circumstances that have shaped who you are..."></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="goals">Future Goals & Aspirations</label>
+                            <textarea id="goals" placeholder="What do you hope to achieve? How does this scholarship fit into your plans?"></textarea>
+                        </div>
+
+                        <button class="btn btn-primary" onclick="extractValue()" id="extractBtn">
+                            <span id="extractBtnText">✨ Discover Hidden Value</span>
+                            <span id="extractBtnLoader" style="display: none;" class="loading"></span>
+                        </button>
+                    </div>
+
+                    <div id="studentStep2" style="display: none;">
+                        <div class="result-box">
+                            <h3>🔍 Hidden Value Detection</h3>
+                            <div id="hiddenValueContent" class="prose"></div>
+                        </div>
+
+                        <div id="reframingSection" style="display: none;">
+                            <!-- Dynamic reframing content will be inserted here -->
+                        </div>
+                    </div>
+
+                    <div id="studentStep3" style="display: none;">
+                        <div class="alert alert-success">
+                            <strong>✅ Profile Complete!</strong> Your authentic strengths have been identified and verified. Ready to generate tailored scholarship applications!
+                        </div>
+
+                        <div class="result-box">
+                            <h3>📋 Your Strategic Profile Summary</h3>
+                            <div id="profileSummary" class="prose"></div>
+                        </div>
+
+                        <button class="btn btn-primary" onclick="switchTab('generator')" style="margin-top: 1rem;">
+                            Continue to Essay Generator →
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 3: Essay Generator -->
+            <div id="generator" class="content-section">
+                <div class="card">
+                    <h2 style="margin-bottom: 1.5rem;">Tailored Essay Generation</h2>
+
+                    <div id="generatorPrerequisite" class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <h3>Complete Previous Steps First</h3>
+                        <p>Please complete the Scholarship Intelligence Analysis and Student Profile sections before generating essays.</p>
+                        <button class="btn btn-secondary" onclick="switchTab('intelligence')" style="margin-top: 1rem;">
+                            Start with Scholarship Intelligence
+                        </button>
+                    </div>
+
+                    <div id="generatorContent" style="display: none;">
+                        <div class="alert alert-info">
+                            <strong>Strategic Essay Generation:</strong> We'll create multiple essay versions that emphasize different aspects of your authentic experience, each optimized for the specific scholarship's values and organizational trajectory.
+                        </div>
+
+                        <div class="input-group">
+                            <label for="essayPrompt">Essay Prompt / Question *</label>
+                            <textarea id="essayPrompt" placeholder="Enter the essay prompt or question from the scholarship application..."></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="wordLimit">Word Limit (if any)</label>
+                            <input type="number" id="wordLimit" placeholder="e.g., 500" >
+                        </div>
+
+                        <div class="input-group">
+                            <label for="emphasisArea">Primary Emphasis (Optional)</label>
+                            <select id="emphasisArea">
+                                <option value="">Let AI decide optimal emphasis</option>
+                                <option value="leadership">Leadership & Initiative</option>
+                                <option value="academic">Academic Excellence</option>
+                                <option value="service">Community Service</option>
+                                <option value="innovation">Innovation & Creativity</option>
+                                <option value="resilience">Overcoming Challenges</option>
+                                <option value="impact">Social Impact</option>
+                            </select>
+                        </div>
+
+                        <button class="btn btn-primary" onclick="generateEssay()" id="generateBtn">
+                            <span id="generateBtnText">✍️ Generate Tailored Essay</span>
+                            <span id="generateBtnLoader" style="display: none;" class="loading"></span>
+                        </button>
+
+                        <div id="essayResults" style="display: none;">
+                            <div class="result-box">
+                                <h3>📄 Your Tailored Essay</h3>
+                                <div id="essayContent" class="prose"></div>
+                            </div>
+
+                            <div class="result-box" style="margin-top: 1rem;">
+                                <h3>🎯 Strategic Rationale</h3>
+                                <div id="rationaleContent" class="prose"></div>
+                            </div>
+
+                            <button class="btn btn-secondary" onclick="switchTab('comparison')" style="margin-top: 1rem;">
+                                View Comparative Analysis →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 4: Comparative Analysis -->
+            <div id="comparison" class="content-section">
+                <div class="card">
+                    <h2 style="margin-bottom: 1.5rem;">Impact Analysis & Comparison</h2>
+
+                    <div id="comparisonPrerequisite" class="empty-state">
+                        <div class="empty-state-icon">📊</div>
+                        <h3>Generate Essay First</h3>
+                        <p>Complete the essay generation to see the comparative analysis showing strategic improvements.</p>
+                        <button class="btn btn-secondary" onclick="switchTab('intelligence')" style="margin-top: 1rem;">
+                            Start Process
+                        </button>
+                    </div>
+
+                    <div id="comparisonContent" style="display: none;">
+                        <div class="alert alert-success">
+                            <strong>Strategic Advantage Demonstrated:</strong> See how strategic positioning and organizational intelligence transform a good application into a compelling one.
+                        </div>
+
+                        <button class="btn btn-primary" onclick="generateComparison()" id="compareBtn">
+                            <span id="compareBtnText">🔄 Generate Comparison Analysis</span>
+                            <span id="compareBtnLoader" style="display: none;" class="loading"></span>
+                        </button>
+
+                        <div id="comparisonResults" style="display: none;">
+                            <div class="comparison-grid" style="margin-top: 2rem;">
+                                <div class="comparison-box before">
+                                    <div class="comparison-label">Generic Approach</div>
+                                    <div id="genericVersion" class="prose"></div>
+                                </div>
+                                <div class="comparison-box after">
+                                    <div class="comparison-label">ScholarshipIQ Optimized</div>
+                                    <div id="optimizedVersion" class="prose"></div>
+                                </div>
+                            </div>
+
+                            <div class="result-box" style="margin-top: 2rem;">
+                                <h3>📈 Key Improvements</h3>
+                                <div id="improvementsContent" class="prose"></div>
+                            </div>
+
+                            <div class="result-box" style="margin-top: 1rem;">
+                                <h3>🎓 Success Probability Assessment</h3>
+                                <div id="assessmentContent" class="prose"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Modal for Verification -->
+        <div id="verificationModal" class="modal">
+            <div class="modal-content">
+                <h3 class="modal-header">Authenticity Verification</h3>
+                <div id="modalMessage"></div>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button class="btn btn-primary" id="modalConfirmBtn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Global state
+        let appState = {
+            scholarship: null,
+            organizationalIntel: null,
+            studentProfile: null,
+            verifiedStrengths: null,
+            generatedEssay: null,
+            essayPrompt: null
+        };
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.closest('.tab')?.classList.add('active') ||
+                document.querySelector(`[onclick*="${tabName}"]`).classList.add('active');
+
+            // Update content sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+
+            // Update prerequisites
+            updateGeneratorPrerequisites();
+            updateComparisonPrerequisites();
+        }
+
+        // Poe API Handlers
+        window.Poe = window.Poe || {};
+
+        // Handler for scholarship analysis
+        window.Poe.registerHandler?.("scholarship-analysis", (result, context) => {
+            const msg = result.responses[0];
+
+            if (msg.status === "error") {
+                showError("scholarship-analysis", msg.statusText);
+                resetButton('analyzeBtn', '🔍 Analyze Organization');
+            } else if (msg.status === "complete") {
+                processScholarshipAnalysis(msg.content);
+                resetButton('analyzeBtn', '🔍 Analyze Organization');
+            }
+        });
+
+        // Handler for value extraction
+        window.Poe.registerHandler?.("value-extraction", (result, context) => {
+            const msg = result.responses[0];
+
+            if (msg.status === "error") {
+                showError("value-extraction", msg.statusText);
+                resetButton('extractBtn', '✨ Discover Hidden Value');
+            } else if (msg.status === "incomplete") {
+                // Show streaming content
+                document.getElementById('hiddenValueContent').innerHTML = formatContent(msg.content);
+            } else if (msg.status === "complete") {
+                processValueExtraction(msg.content);
+                resetButton('extractBtn', '✨ Discover Hidden Value');
+            }
+        });
+
+        // Handler for reframing verification
+        window.Poe.registerHandler?.("reframing-verification", (result, context) => {
+            const msg = result.responses[0];
+
+            if (msg.status === "error") {
+                showError("reframing", msg.statusText);
+            } else if (msg.status === "complete") {
+                processReframingVerification(msg.content, context);
+            }
+        });
+
+        // Handler for essay generation
+        window.Poe.registerHandler?.("essay-generation", (result, context) => {
+            const msg = result.responses[0];
+
+            if (msg.status === "error") {
+                showError("essay-generation", msg.statusText);
+                resetButton('generateBtn', '✍️ Generate Tailored Essay');
+            } else if (msg.status === "incomplete") {
+                document.getElementById('essayContent').innerHTML = formatContent(msg.content);
+                document.getElementById('essayResults').style.display = 'block';
+            } else if (msg.status === "complete") {
+                processEssayGeneration(msg.content);
+                resetButton('generateBtn', '✍️ Generate Tailored Essay');
+            }
+        });
+
+        // Handler for comparison generation
+        window.Poe.registerHandler?.("comparison-generation", (result, context) => {
+            const msg = result.responses[0];
+
+            if (msg.status === "error") {
+                showError("comparison", msg.statusText);
+                resetButton('compareBtn', '🔄 Generate Comparison Analysis');
+            } else if (msg.status === "incomplete") {
+                // Show streaming
+            } else if (msg.status === "complete") {
+                processComparison(msg.content);
+                resetButton('compareBtn', '🔄 Generate Comparison Analysis');
+            }
+        });
+
+        // Phase 1: Analyze Scholarship
+        async function analyzeScholarship() {
+            const scholarshipName = document.getElementById('scholarshipName').value;
+            const organizationName = document.getElementById('organizationName').value;
+            const description = document.getElementById('scholarshipDescription').value;
+            const url = document.getElementById('scholarshipUrl').value;
+
+            if (!scholarshipName || !organizationName) {
+                showCustomAlert('Please enter both scholarship name and organization name.');
+                return;
+            }
+
+            appState.scholarship = {
+                name: scholarshipName,
+                organization: organizationName,
+                description: description,
+                url: url
+            };
+
+            setButtonLoading('analyzeBtn', '🔍 Analyze Organization');
+
+            const prompt = `You are an expert scholarship analyst. Conduct a comprehensive organizational intelligence analysis for the following scholarship:
+
+**Scholarship:** ${scholarshipName}
+**Organization:** ${organizationName}
+${description ? `**Description:** ${description}` : ''}
+${url ? `**Website:** ${url}` : ''}
+
+Perform deep research and analysis on:
+
+1. **Strategic Vision & Future Direction:**
+   - Current strategic plans and transformation initiatives
+   - Long-term vision and emerging priorities
+   - Organizational pivots and new focus areas
+
+2. **Leadership Intelligence:**
+   - Recent leadership quotes and public statements
+   - Executive vision and strategic messaging
+   - Leadership priorities and values
+
+3. **Trajectory Analysis:**
+   - Where is the organization headed (not where they are today)?
+   - Emerging themes vs. traditional focus areas
+   - Evolution in messaging and priorities
+
+4. **Current Events Impact:**
+   - Recent announcements, partnerships, initiatives
+   - Response to industry/societal trends
+   - How current events shape organizational direction
+
+5. **Strategic Priorities for Scholarship Alignment:**
+   - What will this organization value in 2-5 years?
+   - Hidden priorities not explicit in application criteria
+   - Messaging themes that resonate with leadership vision
+
+Use web search to gather real, current information. Provide specific examples, quotes, and actionable insights.
+
+Format your response with clear sections and actionable messaging recommendations.`;
+
+            try {
+                await window.Poe.sendUserMessage(prompt, {
+                    handler: "scholarship-analysis",
+                    stream: false,
+                    openChat: false,
+                    handlerContext: {}
+                });
+            } catch (err) {
+                showError("scholarship-analysis", err.message);
+                resetButton('analyzeBtn', '🔍 Analyze Organization');
+            }
+        }
+
+        function processScholarshipAnalysis(content) {
+            appState.organizationalIntel = content;
+
+            // Parse and display results
+            const sections = parseAnalysisContent(content);
+
+            document.getElementById('intelligenceContent').innerHTML = formatContent(sections.overview || content.substring(0, 500));
+            document.getElementById('prioritiesContent').innerHTML = formatContent(sections.priorities || content.substring(500, 1000));
+
+            // Extract key insights as tags
+            const insights = extractInsights(content);
+            let messagingHTML = '';
+            insights.forEach(insight => {
+                messagingHTML += `<span class="insight-tag">${insight}</span>`;
+            });
+            document.getElementById('messagingContent').innerHTML = messagingHTML || '<p>Strategic insights extracted from organizational analysis.</p>';
+
+            document.getElementById('intelligenceResults').style.display = 'block';
+
+            updateGeneratorPrerequisites();
+        }
+
+        // Phase 2: Extract Student Value
+        async function extractValue() {
+            const studentName = document.getElementById('studentName').value;
+            const academic = document.getElementById('academicInfo').value;
+            const extracurriculars = document.getElementById('extracurriculars').value;
+            const achievements = document.getElementById('achievements').value;
+            const challenges = document.getElementById('challenges').value;
+            const goals = document.getElementById('goals').value;
+
+            if (!academic && !extracurriculars && !achievements) {
+                showCustomAlert('Please provide at least some information about your background and experiences.');
+                return;
+            }
+
+            appState.studentProfile = {
+                name: studentName,
+                academic: academic,
+                extracurriculars: extracurriculars,
+                achievements: achievements,
+                challenges: challenges,
+                goals: goals
+            };
+
+            setButtonLoading('extractBtn', '✨ Discover Hidden Value');
+
+            // Update step indicator
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('step2').classList.add('active');
+
+            const prompt = `You are an expert at identifying authentic student value that students often minimize. Analyze this student's profile and identify hidden strengths, undervalued qualities, and authentic achievements they may not fully recognize.
+
+**Student Profile:**
+${studentName ? `Name: ${studentName}` : ''}
+
+**Academic Background:**
+${academic}
+
+**Extracurricular Activities:**
+${extracurriculars}
+
+**Achievements:**
+${achievements}
+
+**Challenges & Growth:**
+${challenges}
+
+**Goals:**
+${goals}
+
+TASK:
+1. Identify patterns of self-minimization (phrases like "just helped," "only volunteered," "managed to")
+2. Recognize authentic organizational value in activities the student considers "normal"
+3. Extract 5-7 key strengths and qualities this student demonstrates
+4. For each strength, provide:
+   - The authentic activity/experience (what they actually did)
+   - Why this has organizational value
+   - A strategically reframed version that emphasizes impact without exaggeration
+
+Be specific, authentic, and focus on real value. Do NOT fabricate or exaggerate - only reframe what's genuinely there.
+
+Format clearly with sections for each identified strength.`;
+
+            try {
+                await window.Poe.sendUserMessage(`@Claude-Sonnet-4.5 ${prompt}`, {
+                    handler: "value-extraction",
+                    stream: true,
+                    openChat: false,
+                    handlerContext: {}
+                });
+            } catch (err) {
+                showError("value-extraction", err.message);
+                resetButton('extractBtn', '✨ Discover Hidden Value');
+            }
+        }
+
+        function processValueExtraction(content) {
+            document.getElementById('hiddenValueContent').innerHTML = formatContent(content);
+            document.getElementById('studentStep1').style.display = 'none';
+            document.getElementById('studentStep2').style.display = 'block';
+
+            // Create verification interface
+            createVerificationInterface(content);
+        }
+
+        function createVerificationInterface(analysisContent) {
+            const reframingSection = document.getElementById('reframingSection');
+
+            const html = `
+                <div class="verification-box">
+                    <h4 style="margin-bottom: 1rem;">✅ Authenticity Verification Required</h4>
+                    <p>We've identified potential strengths in your profile. Please review the analysis above carefully.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Important:</strong> We've reframed your experiences to emphasize their value. Verify that everything is accurate and authentic.</p>
+
+                    <div class="input-group" style="margin-top: 1.5rem;">
+                        <label>Do all the identified strengths accurately reflect your authentic experiences?</label>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                            Can you confidently discuss and defend each point in an interview?
+                        </p>
+                    </div>
+
+                    <div class="verification-buttons">
+                        <button class="btn btn-secondary" onclick="requestRevisions()">
+                            Need Revisions
+                        </button>
+                        <button class="btn btn-primary" onclick="confirmAuthenticity()">
+                            ✓ Yes, This Is Accurate
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            reframingSection.innerHTML = html;
+            reframingSection.style.display = 'block';
+        }
+
+        function confirmAuthenticity() {
+            // Move to step 3
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step2').classList.add('completed');
+            document.getElementById('step3').classList.add('active');
+
+            appState.verifiedStrengths = document.getElementById('hiddenValueContent').textContent;
+
+            document.getElementById('studentStep2').style.display = 'none';
+            document.getElementById('studentStep3').style.display = 'block';
+
+            // Create summary
+            const summary = `
+                <p><strong>Profile Verified:</strong> Your authentic strengths have been identified and confirmed.</p>
+                <p style="margin-top: 1rem;">You're now ready to generate strategically tailored scholarship essays that emphasize the right aspects of your profile for specific opportunities.</p>
+                <div class="badge badge-success" style="margin-top: 1rem;">Profile Complete ✓</div>
+            `;
+            document.getElementById('profileSummary').innerHTML = summary;
+
+            updateGeneratorPrerequisites();
+        }
+
+        function requestRevisions() {
+            showCustomAlert('Please provide specific feedback about what needs to be revised, then click "Discover Hidden Value" again with updated information.');
+        }
+
+        // Phase 3: Generate Essay
+        function updateGeneratorPrerequisites() {
+            const hasIntel = appState.organizationalIntel !== null;
+            const hasProfile = appState.verifiedStrengths !== null;
+
+            if (hasIntel && hasProfile) {
+                document.getElementById('generatorPrerequisite').style.display = 'none';
+                document.getElementById('generatorContent').style.display = 'block';
+            }
+        }
+
+        async function generateEssay() {
+            const essayPrompt = document.getElementById('essayPrompt').value;
+            const wordLimit = document.getElementById('wordLimit').value;
+            const emphasis = document.getElementById('emphasisArea').value;
+
+            if (!essayPrompt) {
+                showCustomAlert('Please enter the essay prompt or question.');
+                return;
+            }
+
+            if (!appState.organizationalIntel || !appState.verifiedStrengths) {
+                showCustomAlert('Please complete the scholarship intelligence and student profile sections first.');
+                return;
+            }
+
+            appState.essayPrompt = essayPrompt;
+            setButtonLoading('generateBtn', '✍️ Generate Tailored Essay');
+
+            const prompt = `You are an expert scholarship essay writer. Generate a strategically tailored scholarship essay that aligns the student's authentic strengths with the organization's future trajectory.
+
+**ORGANIZATIONAL INTELLIGENCE:**
+${appState.organizationalIntel}
+
+**STUDENT'S VERIFIED STRENGTHS:**
+${appState.verifiedStrengths}
+
+**ESSAY PROMPT:**
+${essayPrompt}
+
+${wordLimit ? `**Word Limit:** ${wordLimit} words` : ''}
+${emphasis ? `**Primary Emphasis:** ${emphasis}` : ''}
+
+**REQUIREMENTS:**
+1. Write a compelling essay that directly addresses the prompt
+2. Strategically emphasize aspects of the student's profile that align with:
+   - The organization's future trajectory (not just current state)
+   - Leadership vision and strategic priorities
+   - Emerging organizational themes and values
+3. Incorporate relevant leadership quotes or strategic initiatives where appropriate
+4. Maintain the student's authentic voice - no exaggeration
+5. Demonstrate sophisticated understanding of organizational evolution
+6. Make it emotionally resonant while professionally strategic
+
+${wordLimit ? `Keep within ${wordLimit} words.` : 'Aim for 500-650 words unless otherwise specified.'}
+
+After the essay, provide a "STRATEGIC RATIONALE" section explaining:
+- Which strengths you emphasized and why
+- How you aligned with organizational trajectory
+- Specific strategic choices made
+- Why this approach maximizes impact
+
+Write naturally, compellingly, and authentically.`;
+
+            try {
+                await window.Poe.sendUserMessage(`@Claude-Sonnet-4.5 ${prompt}`, {
+                    handler: "essay-generation",
+                    stream: true,
+                    openChat: false,
+                    handlerContext: {}
+                });
+            } catch (err) {
+                showError("essay-generation", err.message);
+                resetButton('generateBtn', '✍️ Generate Tailored Essay');
+            }
+        }
+
+        function processEssayGeneration(content) {
+            appState.generatedEssay = content;
+
+            // Split essay and rationale
+            const parts = content.split(/STRATEGIC RATIONALE|Strategic Rationale/i);
+
+            if (parts.length > 1) {
+                document.getElementById('essayContent').innerHTML = formatContent(parts[0].trim());
+                document.getElementById('rationaleContent').innerHTML = formatContent(parts[1].trim());
+            } else {
+                document.getElementById('essayContent').innerHTML = formatContent(content);
+                document.getElementById('rationaleContent').innerHTML = '<p>Strategic positioning applied throughout the essay.</p>';
+            }
+
+            document.getElementById('essayResults').style.display = 'block';
+            updateComparisonPrerequisites();
+        }
+
+        // Phase 4: Comparative Analysis
+        function updateComparisonPrerequisites() {
+            const hasEssay = appState.generatedEssay !== null;
+
+            if (hasEssay) {
+                document.getElementById('comparisonPrerequisite').style.display = 'none';
+                document.getElementById('comparisonContent').style.display = 'block';
+            }
+        }
+
+        async function generateComparison() {
+            if (!appState.generatedEssay) {
+                showCustomAlert('Please generate an essay first.');
+                return;
+            }
+
+            setButtonLoading('compareBtn', '🔄 Generate Comparison Analysis');
+
+            const prompt = `You are comparing a strategically optimized scholarship essay against a generic approach. Generate a comparative analysis.
+
+**ESSAY PROMPT:**
+${appState.essayPrompt}
+
+**STUDENT PROFILE (summary):**
+${appState.studentProfile.academic.substring(0, 200)}...
+
+**OPTIMIZED ESSAY (generated by ScholarshipIQ):**
+${appState.generatedEssay}
+
+**TASK:**
+1. Create a "GENERIC VERSION" - what a typical student might write without strategic intelligence:
+   - Generic opening about loving to help people
+   - Surface-level activities description
+   - No organizational alignment
+   - Missing strategic positioning
+   - About 250-300 words
+
+2. Create an "OPTIMIZED VERSION EXCERPT" - key paragraph(s) from the ScholarshipIQ essay showing strategic positioning (250-300 words)
+
+3. List "KEY IMPROVEMENTS" - specific differences:
+   - Strategic alignment with organizational trajectory
+   - Leadership quote integration
+   - Authentic value amplification
+   - Future-focused positioning
+   - Emotional + strategic impact
+
+4. "SUCCESS PROBABILITY ASSESSMENT" - honest comparison of how each version likely performs
+
+Format with clear sections:
+GENERIC VERSION:
+[text]
+
+OPTIMIZED VERSION:
+[text]
+
+KEY IMPROVEMENTS:
+[bullet points]
+
+SUCCESS PROBABILITY ASSESSMENT:
+[analysis]`;
+
+            try {
+                await window.Poe.sendUserMessage(`@Claude-Sonnet-4.5 ${prompt}`, {
+                    handler: "comparison-generation",
+                    stream: false,
+                    openChat: false,
+                    handlerContext: {}
+                });
+            } catch (err) {
+                showError("comparison", err.message);
+                resetButton('compareBtn', '🔄 Generate Comparison Analysis');
+            }
+        }
+
+        function processComparison(content) {
+            // Parse the comparison content
+            const sections = parseComparisonContent(content);
+
+            document.getElementById('genericVersion').innerHTML = formatContent(sections.generic);
+            document.getElementById('optimizedVersion').innerHTML = formatContent(sections.optimized);
+            document.getElementById('improvementsContent').innerHTML = formatContent(sections.improvements);
+            document.getElementById('assessmentContent').innerHTML = formatContent(sections.assessment);
+
+            document.getElementById('comparisonResults').style.display = 'block';
+        }
+
+        // Utility Functions
+        function parseAnalysisContent(content) {
+            const sections = {
+                overview: '',
+                priorities: ''
+            };
+
+            // Simple parsing - in production, use more sophisticated parsing
+            const lines = content.split('\n');
+            let currentSection = 'overview';
+
+            for (let line of lines) {
+                if (line.toLowerCase().includes('strategic') || line.toLowerCase().includes('priority')) {
+                    currentSection = 'priorities';
+                }
+                sections[currentSection] += line + '\n';
+            }
+
+            return sections;
+        }
+
+        function extractInsights(content) {
+            // Extract key phrases as insights
+            const insights = [];
+            const keywords = ['innovation', 'leadership', 'impact', 'diversity', 'equity', 'sustainability', 'excellence', 'community', 'transformation', 'future'];
+
+            keywords.forEach(keyword => {
+                if (content.toLowerCase().includes(keyword)) {
+                    insights.push(keyword.charAt(0).toUpperCase() + keyword.slice(1));
+                }
+            });
+
+            return insights.slice(0, 6); // Return max 6 insights
+        }
+
+        function parseComparisonContent(content) {
+            const sections = {
+                generic: '',
+                optimized: '',
+                improvements: '',
+                assessment: ''
+            };
+
+            const genericMatch = content.match(/GENERIC VERSION:?\s*([\s\S]*?)(?=OPTIMIZED VERSION|$)/i);
+            const optimizedMatch = content.match(/OPTIMIZED VERSION:?\s*([\s\S]*?)(?=KEY IMPROVEMENTS|$)/i);
+            const improvementsMatch = content.match(/KEY IMPROVEMENTS:?\s*([\s\S]*?)(?=SUCCESS PROBABILITY|$)/i);
+            const assessmentMatch = content.match(/SUCCESS PROBABILITY ASSESSMENT:?\s*([\s\S]*?)$/i);
+
+            sections.generic = genericMatch ? genericMatch[1].trim() : 'Generic version analysis...';
+            sections.optimized = optimizedMatch ? optimizedMatch[1].trim() : 'Optimized version excerpt...';
+            sections.improvements = improvementsMatch ? improvementsMatch[1].trim() : 'Strategic improvements identified...';
+            sections.assessment = assessmentMatch ? assessmentMatch[1].trim() : 'Success probability enhanced significantly...';
+
+            return sections;
+        }
+
+        function formatContent(text) {
+            // Convert markdown-like formatting to HTML
+            if (!text) return '';
+
+            // Convert **bold** to <strong>
+            text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+            // Convert *italic* to <em>
+            text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+            // Convert line breaks to paragraphs
+            const paragraphs = text.split('\n\n').filter(p => p.trim());
+            let html = paragraphs.map(p => {
+                p = p.trim();
+                if (p.startsWith('- ') || p.startsWith('• ')) {
+                    return `<li>${p.substring(2)}</li>`;
+                } else if (p.match(/^\d+\./)) {
+                    return `<li>${p.substring(p.indexOf('.') + 1).trim()}</li>`;
+                } else if (p.startsWith('#')) {
+                    const level = p.match(/^#+/)[0].length;
+                    const text = p.substring(level).trim();
+                    return `<h${Math.min(level + 2, 6)}>${text}</h${Math.min(level + 2, 6)}>`;
+                }
+                return `<p>${p}</p>`;
+            }).join('');
+
+            // Wrap consecutive <li> in <ul>
+            html = html.replace(/(<li>.*?<\/li>)+/g, match => `<ul>${match}</ul>`);
+
+            return html;
+        }
+
+        function setButtonLoading(btnId, originalText) {
+            const btn = document.getElementById(btnId);
+            btn.disabled = true;
+            document.getElementById(btnId + 'Text').style.display = 'none';
+            document.getElementById(btnId + 'Loader').style.display = 'inline-block';
+        }
+
+        function resetButton(btnId, text) {
+            const btn = document.getElementById(btnId);
+            btn.disabled = false;
+            document.getElementById(btnId + 'Text').style.display = 'inline';
+            document.getElementById(btnId + 'Loader').style.display = 'none';
+        }
+
+        function showError(context, message) {
+            showCustomAlert(`Error in ${context}: ${message}`);
+        }
+
+        function showCustomAlert(message) {
+            const modal = document.getElementById('verificationModal');
+            document.getElementById('modalMessage').innerHTML = `<p>${message}</p>`;
+            document.getElementById('modalConfirmBtn').onclick = closeModal;
+            document.getElementById('modalConfirmBtn').textContent = 'OK';
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('verificationModal').classList.remove('active');
+        }
+
+        // Close modal on outside click
+        document.getElementById('verificationModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
+
