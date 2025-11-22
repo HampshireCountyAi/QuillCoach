@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ScholarshipIQ - AI-Powered Application Optimizer</title>
+    <title>QuillCoach - AI-Powered Application Optimizer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -124,6 +124,17 @@
             border-color: var(--primary);
             color: white;
             box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 30%, transparent);
+        }
+
+        .tab.completed::after {
+            content: ' ✓';
+            color: var(--success);
+            font-weight: 700;
+            margin-left: 0.25rem;
+        }
+
+        .tab.active.completed::after {
+            color: white;
         }
 
         .content-section {
@@ -342,6 +353,42 @@
             color: var(--text-primary);
         }
 
+        .success-banner {
+            background: linear-gradient(135deg, color-mix(in srgb, var(--success) 10%, var(--bg-card)) 0%, var(--bg-card) 100%);
+            border: 2px solid var(--success);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success-banner-content {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .success-banner-title {
+            font-weight: 700;
+            color: var(--success);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .success-banner-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
         .verification-box {
             background: color-mix(in srgb, var(--accent) 10%, var(--bg-main));
             border: 2px solid var(--accent);
@@ -515,6 +562,257 @@
             margin-top: 1.5rem;
             justify-content: flex-end;
         }
+
+        /* Refinement Chat Side Panel */
+        .chat-panel {
+            position: fixed;
+            top: 0;
+            right: -600px;
+            width: 600px;
+            max-width: 90vw;
+            height: 100vh;
+            background: var(--bg-card);
+            box-shadow: -4px 0 20px rgba(0,0,0,0.2);
+            z-index: 1001;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border-left: 3px solid var(--primary);
+        }
+
+        .chat-panel.open {
+            right: 0;
+        }
+
+        .chat-panel-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--border);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        .chat-panel-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .chat-panel-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .chat-panel-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .chat-panel-close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .chat-analysis-reference {
+            padding: 1rem;
+            background: var(--bg-main);
+            border-bottom: 2px solid var(--border);
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+        }
+
+        .chat-analysis-reference summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .chat-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+        }
+
+        .chat-avatar.claude {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        }
+
+        .chat-avatar.user {
+            background: var(--accent);
+        }
+
+        .chat-bubble {
+            max-width: 75%;
+            padding: 0.875rem 1.125rem;
+            border-radius: 12px;
+            line-height: 1.6;
+        }
+
+        .chat-message.claude .chat-bubble {
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+        }
+
+        .chat-message.user .chat-bubble {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+        }
+
+        .chat-typing {
+            display: flex;
+            gap: 0.4rem;
+            padding: 0.5rem;
+        }
+
+        .chat-typing span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: typing 1.4s infinite;
+        }
+
+        .chat-typing span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .chat-typing span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.7; }
+            30% { transform: translateY(-10px); opacity: 1; }
+        }
+
+        .chat-input-container {
+            padding: 1rem 1.5rem;
+            border-top: 2px solid var(--border);
+            background: var(--bg-card);
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            resize: vertical;
+            min-height: 44px;
+            max-height: 120px;
+            font-family: 'Work Sans', sans-serif;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent);
+        }
+
+        .chat-send-btn {
+            padding: 0.875rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .chat-send-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 40%, transparent);
+        }
+
+        .chat-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .chat-actions {
+            padding: 1rem 1.5rem;
+            border-top: 2px solid var(--border);
+            background: var(--bg-main);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chat-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .chat-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        @media (max-width: 768px) {
+            .chat-panel {
+                width: 100vw;
+                right: -100vw;
+            }
+        }
     </style>
 </head>
 <body>
@@ -522,8 +820,15 @@
         <!-- Header -->
         <div class="header">
             <div class="max-width-container">
-                <h1 class="logo-text">ScholarshipIQ</h1>
-                <p class="tagline mono">AI-Powered Adaptive Application System</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h1 class="logo-text">QuillCoach</h1>
+                        <p class="tagline mono">AI-Powered Adaptive Application System</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="openSettings()" style="font-size: 0.9rem;">
+                        ⚙️ Settings
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -548,7 +853,12 @@
             <!-- Phase 1: Scholarship Intelligence -->
             <div id="intelligence" class="content-section active">
                 <div class="card">
-                    <h2 style="margin-bottom: 1.5rem;">Organizational Intelligence Analysis</h2>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                        <h2 style="margin: 0;">Organizational Intelligence Analysis</h2>
+                        <button class="btn btn-secondary" onclick="openTestDataModal('scholarship')" style="font-size: 0.9rem;">
+                            📝 Load Test Data
+                        </button>
+                    </div>
 
                     <div class="alert alert-info">
                         <strong>Strategic Advantage:</strong> We analyze not just the scholarship criteria, but the organization's future trajectory, leadership vision, and strategic priorities to position your application where they're headed, not where they've been.
@@ -579,6 +889,8 @@
                         <span id="analyzeBtnLoader" style="display: none;" class="loading"></span>
                     </button>
 
+                    <div id="scholarshipSuccessBanner" style="display: none;"></div>
+
                     <div id="intelligenceResults" style="display: none;">
                         <div class="result-box">
                             <h3>📊 Organizational Intelligence Report</h3>
@@ -601,7 +913,12 @@
             <!-- Phase 2: Student Profile -->
             <div id="student" class="content-section">
                 <div class="card">
-                    <h2 style="margin-bottom: 1.5rem;">Authentic Value Extraction</h2>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                        <h2 style="margin: 0;">Authentic Value Extraction</h2>
+                        <button class="btn btn-secondary" onclick="openTestDataModal('student')" style="font-size: 0.9rem;">
+                            📝 Load Test Data
+                        </button>
+                    </div>
 
                     <div class="alert alert-warning">
                         <strong>Our Philosophy:</strong> We help you recognize and articulate your authentic value. We'll identify qualities you may be minimizing, reframe them strategically, and verify everything with you to ensure complete honesty.
@@ -707,7 +1024,12 @@
                         </div>
 
                         <div class="input-group">
-                            <label for="essayPrompt">Essay Prompt / Question *</label>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <label for="essayPrompt" style="margin: 0;">Essay Prompt / Question *</label>
+                                <button class="btn btn-secondary" onclick="openPromptModal()" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+                                    📝 Load Test Prompt
+                                </button>
+                            </div>
                             <textarea id="essayPrompt" placeholder="Enter the essay prompt or question from the scholarship application..."></textarea>
                         </div>
 
@@ -784,7 +1106,7 @@
                                     <div id="genericVersion" class="prose"></div>
                                 </div>
                                 <div class="comparison-box after">
-                                    <div class="comparison-label">ScholarshipIQ Optimized</div>
+                                    <div class="comparison-label">QuillCoach Optimized</div>
                                     <div id="optimizedVersion" class="prose"></div>
                                 </div>
                             </div>
@@ -815,6 +1137,168 @@
                 </div>
             </div>
         </div>
+
+        <!-- Test Data Modal -->
+        <div id="testDataModal" class="modal">
+            <div class="modal-content">
+                <h3 class="modal-header">Load Test Data</h3>
+                <div id="testDataMessage">
+                    <p id="testDataDescription"></p>
+                    <div class="input-group" style="margin-top: 1.5rem;">
+                        <label for="testDataSelect">Select Example:</label>
+                        <select id="testDataSelect" style="font-size: 16px;">
+                            <option value="">-- Select an example --</option>
+                        </select>
+                    </div>
+                    <div class="alert alert-warning" style="margin-top: 1rem; font-size: 0.9rem;">
+                        <strong>⚠️ Warning:</strong> This will overwrite any existing data in the form. Your current data will be lost.
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" onclick="closeTestDataModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="loadSelectedTestData()">Load Data</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Overlay -->
+        <div id="chatOverlay" class="chat-overlay" onclick="closeRefinementChat()"></div>
+
+        <!-- Refinement Chat Panel -->
+        <div id="refinementChatPanel" class="chat-panel">
+            <div class="chat-panel-header">
+                <button class="chat-panel-close" onclick="closeRefinementChat()">×</button>
+                <div class="chat-panel-title">💬 Refine Your Profile</div>
+                <div class="chat-panel-subtitle">Chat with Claude to add context or correct interpretations</div>
+            </div>
+
+            <details class="chat-analysis-reference">
+                <summary>📋 Current Analysis (click to view)</summary>
+                <div id="chatReferenceAnalysis" style="margin-top: 0.5rem;"></div>
+            </details>
+
+            <div class="chat-messages" id="chatMessages"></div>
+
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <textarea
+                        id="chatInput"
+                        class="chat-input"
+                        placeholder="Type your message... (e.g., 'I also mentor my cousins' or 'This part isn't quite right')"
+                        rows="1"
+                    ></textarea>
+                    <button class="chat-send-btn" id="chatSendBtn" onclick="sendChatMessage()">Send</button>
+                </div>
+            </div>
+
+            <div class="chat-actions">
+                <button class="btn btn-secondary" onclick="closeRefinementChat()" style="flex: 1;">Close</button>
+                <button class="btn btn-primary" onclick="applyRefinedAnalysis()" style="flex: 1;">Apply Updated Analysis</button>
+            </div>
+        </div>
+
+        <!-- Essay Prompt Modal -->
+        <div id="promptModal" class="modal">
+            <div class="modal-content">
+                <h3 class="modal-header">Load Sample Essay Prompt</h3>
+                <div id="promptModalContent">
+                    <div class="alert alert-info" style="margin-bottom: 1.5rem; font-size: 0.9rem;">
+                        <strong>Note:</strong> These are representative prompts aligned with each scholarship's themes and values. They are <strong>not</strong> official application questions.
+                    </div>
+                    <div class="input-group">
+                        <label for="promptSelect">Select a prompt:</label>
+                        <select id="promptSelect" style="font-size: 16px;" onchange="updatePromptPreview()">
+                            <option value="">-- Choose a sample prompt --</option>
+                        </select>
+                    </div>
+                    <div id="promptPreview" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--bg-main); border-radius: 8px; border: 1px solid var(--border);">
+                        <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--primary);">Preview:</div>
+                        <div id="promptPreviewText" style="font-style: italic; color: var(--text-secondary);"></div>
+                        <div id="promptPreviewLimit" style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);"></div>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" onclick="closePromptModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="loadSelectedPrompt()">Load Prompt</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="modal">
+            <div class="modal-content" style="max-width: 700px;">
+                <h3 class="modal-header">⚙️ Thinking Budget Settings</h3>
+                <div id="settingsContent">
+                    <div class="alert alert-info" style="margin-bottom: 1.5rem; font-size: 0.9rem;">
+                        <strong>About Thinking Budgets:</strong> Higher budgets allow Claude to "think" more deeply, improving quality but increasing cost. Set to 0 to minimize costs. Changes apply to the next API call.
+                    </div>
+
+                    <div class="input-group">
+                        <label for="budgetScholarship">
+                            Scholarship Analysis (Default: 8192)
+                            <span style="color: var(--text-secondary); font-size: 0.85rem; font-weight: 400;">
+                                - Strategic research & trajectory analysis
+                            </span>
+                        </label>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <input type="range" id="budgetScholarship" min="0" max="32000" step="1024" value="8192"
+                                   style="flex: 1;" oninput="updateBudgetDisplay('scholarshipAnalysis', this.value)">
+                            <input type="number" id="budgetScholarshipNum" min="0" max="32000" value="8192"
+                                   style="width: 100px; font-size: 16px;" oninput="updateBudgetSlider('scholarshipAnalysis', this.value)">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="budgetValue">
+                            Value Extraction (Default: 8192)
+                            <span style="color: var(--text-secondary); font-size: 0.85rem; font-weight: 400;">
+                                - Identifying self-minimizing language & hidden strengths
+                            </span>
+                        </label>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <input type="range" id="budgetValue" min="0" max="32000" step="1024" value="8192"
+                                   style="flex: 1;" oninput="updateBudgetDisplay('valueExtraction', this.value)">
+                            <input type="number" id="budgetValueNum" min="0" max="32000" value="8192"
+                                   style="width: 100px; font-size: 16px;" oninput="updateBudgetSlider('valueExtraction', this.value)">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="budgetEssay">
+                            Essay Generation (Default: 16384)
+                            <span style="color: var(--text-secondary); font-size: 0.85rem; font-weight: 400;">
+                                - Complex synthesis of org intel + student profile
+                            </span>
+                        </label>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <input type="range" id="budgetEssay" min="0" max="32000" step="1024" value="16384"
+                                   style="flex: 1;" oninput="updateBudgetDisplay('essayGeneration', this.value)">
+                            <input type="number" id="budgetEssayNum" min="0" max="32000" value="16384"
+                                   style="width: 100px; font-size: 16px;" oninput="updateBudgetSlider('essayGeneration', this.value)">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="budgetComparison">
+                            Comparison Analysis (Default: 4096)
+                            <span style="color: var(--text-secondary); font-size: 0.85rem; font-weight: 400;">
+                                - Generic vs optimized comparison
+                            </span>
+                        </label>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <input type="range" id="budgetComparison" min="0" max="32000" step="1024" value="4096"
+                                   style="flex: 1;" oninput="updateBudgetDisplay('comparison', this.value)">
+                            <input type="number" id="budgetComparisonNum" min="0" max="32000" value="4096"
+                                   style="width: 100px; font-size: 16px;" oninput="updateBudgetSlider('comparison', this.value)">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" onclick="resetSettings()">Reset to Defaults</button>
+                    <button class="btn btn-primary" onclick="saveSettingsModal()">Save Settings</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -837,8 +1321,188 @@
             studentProfile: null,
             verifiedStrengths: null,
             generatedEssay: null,
-            essayPrompt: null
+            essayPrompt: null,
+            completed: {
+                scholarshipAnalysis: false,
+                studentProfile: false,
+                essayGeneration: false,
+                comparison: false
+            }
         };
+
+        // Settings state with defaults (in-memory only, resets on reload)
+        let settings = {
+            thinkingBudgets: {
+                scholarshipAnalysis: 8192,
+                valueExtraction: 8192,
+                essayGeneration: 16384,
+                comparison: 4096
+            }
+        };
+
+        // Chat state for refinement
+        let chatState = {
+            conversationHistory: [],
+            currentAnalysis: '',
+            isWaitingForResponse: false
+        };
+
+        // Test Data - Scholarships (REAL DATA)
+        const scholarshipTestData = {
+            'dell': {
+                name: 'Dell Scholars Program',
+                organization: 'Michael & Susan Dell Foundation',
+                description: `The Dell Scholars Program recognizes students who overcome significant obstacles to pursue their education. Each year, 500 students nationwide become Dell Scholars, gaining financial assistance, academic advising, career coaching, and a team of dedicated experts who support them every step of the way.
+
+ELIGIBILITY REQUIREMENTS:
+• Minimum cumulative GPA of 2.4 on a 4.0 scale
+• Be a high school senior on track to graduate in the current academic year
+• Plan to enroll full-time at an accredited four-year college or university immediately after high school
+• Participate in a college readiness program approved by the Michael & Susan Dell Foundation in grades 11 and 12
+• Be eligible to receive a Federal Pell Grant in their first year of college
+• Be a U.S. citizen or permanent resident and demonstrate financial need
+
+PROGRAM BENEFITS:
+• $20,000 flexible scholarship covering tuition and housing
+• Laptop and book credits
+• Emergency funds for unexpected challenges
+• Academic advising and career coaching
+• Comprehensive support network
+
+CORE VALUES:
+The program targets low-income, highly motivated students who are better than their numbers indicate and demonstrate the drive to succeed despite personal obstacles. Selection committee evaluates applicants based on:
+• Perseverance: They turn obstacles into opportunities, finding ways to move forward and succeed
+• Self-motivation and determination: They take initiative, seek opportunities, and keep pushing forward
+• Problem-solving skills and adaptability: Ready to contribute and grow, bringing adaptability and perseverance
+• Grit, potential, and ambition despite facing significant personal obstacles`,
+                url: 'https://www.dellscholars.org/',
+                samplePrompts: [
+                    {
+                        prompt: "Describe a significant obstacle you've overcome and how it has shaped your determination to succeed in college. What did you learn about yourself through this experience?",
+                        wordLimit: 500
+                    },
+                    {
+                        prompt: "Explain how your work or family responsibilities have influenced your educational goals. How have these experiences prepared you for the challenges of college?",
+                        wordLimit: 500
+                    }
+                ]
+            },
+            'cocacola': {
+                name: 'Coca-Cola Scholars Program',
+                organization: 'Coca-Cola Scholars Foundation',
+                description: `The Coca-Cola Scholars Program is an achievement-based scholarship awarded to students in their final year of high school. 150 Coca-Cola Scholars are selected each year to receive this $20,000 scholarship.
+
+ELIGIBILITY REQUIREMENTS:
+• Currently enrolled high school/home-schooled students attending school in one of the 50 U.S. states, the District of Columbia, Puerto Rico, or select DoD schools
+• Will graduate high school during the 2025-2026 academic school year
+• U.S. Citizens, U.S. Nationals, U.S. Permanent Residents, Refugees, Asylees, Cuban-Haitian Entrants, or Humanitarian Parolees
+• Minimum 3.0 unweighted GPA at the end of your junior year
+• Planning to pursue a degree at an accredited U.S. post-secondary institution
+
+MISSION & VALUES:
+Students are recognized for their capacity to lead and serve, as well as their commitment to making a significant impact on their schools and communities. Coca-Cola Scholars are well-rounded, bright young leaders who:
+• Excel academically
+• Are actively involved in their schools and communities
+• Demonstrate curiosity and are service-oriented
+• Show sustained commitment to improving their community
+• Display exceptional leadership qualities
+
+SELECTION CRITERIA:
+More than 105,000 students apply each year. Selection is based on:
+• Academic excellence
+• Leadership qualities and demonstrated leadership roles
+• Community service involvement and sustained community impact
+• Personal essays showcasing character and vision
+• Commitment to making a significant, positive difference
+
+The program seeks visionary leaders who are refreshing the world through service, leadership, and action.`,
+                url: 'https://www.coca-colascholarsfoundation.org/',
+                samplePrompts: [
+                    {
+                        prompt: "Describe how you've demonstrated leadership in your school or community. What impact did your leadership have, and what did you learn from the experience?",
+                        wordLimit: 500
+                    },
+                    {
+                        prompt: "Discuss a service project or initiative where you made a meaningful impact. How did this experience shape your perspective on community engagement and your role as a changemaker?",
+                        wordLimit: 500
+                    }
+                ]
+            },
+            'cooke': {
+                name: 'Jack Kent Cooke Foundation College Scholarship',
+                organization: 'Jack Kent Cooke Foundation',
+                description: `The Cooke College Scholarship Program is an undergraduate scholarship program available to high-achieving high school seniors with financial need who seek to attend and graduate from the nation's top four-year colleges and universities.
+
+ELIGIBILITY REQUIREMENTS:
+• Minimum cumulative unweighted GPA of 3.75
+• Must submit standardized test score(s) from one of the following: SAT, ACT, AP, or IB exam (no minimum score requirement)
+• Must apply during senior year of high school
+• Must reside in the United States or a U.S. territory and attend all four years of high school in the United States
+• Maximum annual gross income of $95,000 (last year's cohort had a median family income of approximately $34,000)
+• GED recipients are not eligible
+
+SCHOLARSHIP BENEFITS:
+• Can provide as much as $55,000 per year to pursue a bachelor's degree at any accredited undergraduate institution
+• Award is last dollar funding after all institutional aid
+• Covers a significant share of educational expenses including tuition, living expenses, books and required fees
+• Comprehensive educational advising
+• Significant cohort-based programming
+• Graduate school funding for Cooke Scholars
+• Thriving network of nearly 3,200 fellow Cooke Scholars and Alumni
+
+SELECTION CRITERIA:
+The Foundation reviews each application individually with assistance from educational professionals, evaluating:
+• Academic ability and achievement: Strong academic record, outstanding teacher recommendations, desire to be challenged, enthusiasm for learning
+• Leadership: Motivates others, takes initiative, contributes positively to the community
+• Persistence: Exhibits determination when faced with obstacles, goal-oriented, confronts challenges with ability to adapt to change
+• Unmet financial need
+
+MISSION:
+The Foundation is dedicated to advancing the education of exceptionally promising students who have financial need. Core belief: "high-potential, low-income students will excel educationally when given the resources to develop their talents."`,
+                url: 'https://www.jkcf.org/our-scholarships/college-scholarship-program/',
+                samplePrompts: [
+                    {
+                        prompt: "What makes you an ideal Jack Kent Cooke Scholar, and what can you contribute to the Cooke Scholars community? Discuss your academic achievements, personal qualities, and future goals.",
+                        wordLimit: 500
+                    },
+                    {
+                        prompt: "Describe how you've pursued academic excellence despite financial or personal challenges. How have these experiences shaped your determination and what you hope to achieve?",
+                        wordLimit: 500
+                    }
+                ]
+            }
+        };
+
+        // Test Data - Student Profiles (FICTIONAL DATA)
+        const studentTestData = {
+            'profile1': {
+                name: 'Jordan Martinez',
+                academic: `I have a 3.1 GPA. I take mostly regular classes, though I did take AP English this year. My SAT score was 1180. I try to keep my grades up but I also work 20 hours a week at Target to help my family with bills, so sometimes it's hard to study as much as I'd like. I made honor roll a few times in 10th and 11th grade. I'm planning to major in business or maybe nursing - I'm not totally sure yet.`,
+                extracurriculars: `I've been working part-time at Target for almost two years now. I just stock shelves and help customers, nothing special. On weekends when I'm not working, I volunteer at our local food bank - I've been doing that since sophomore year. I guess I've logged around 150 hours there total? I mostly just sort donations and pack boxes. I'm also in the school's National Honor Society, though I'm not an officer or anything, just a regular member. I tried to join the debate team freshman year but had to quit because of my work schedule.`,
+                achievements: `I got Employee of the Month at Target once, which was nice. At the food bank, they asked me to help train new volunteers a few times because I've been there a while. I also helped my younger sister's Girl Scout troop organize a coat drive last winter - we collected maybe 200 coats for families in need. It wasn't a huge thing, but people seemed to appreciate it. Oh, and I made the Principal's List once in 11th grade.`,
+                challenges: `My mom is a single parent and works two jobs, so I help take care of my younger sister (she's 12) and contribute to household expenses with my job. We moved here from another state when I was in 9th grade after my parents' divorce, which was pretty tough. I had to learn to make new friends and adjust to a different school system. Money is tight, so I've never done expensive summer programs or SAT prep courses or anything like that. I study using free Khan Academy videos. Being the first person in my family to go to college is exciting but also kind of scary since I don't really know how all of this works.`,
+                goals: `I want to get a college degree so I can have a stable career and help support my family. I'm interested in either business management or nursing because both seem like they lead to good jobs. Eventually, I'd like to earn enough to help my mom retire early since she's worked so hard for us. I also want to show my sister that college is possible for our family. This scholarship would really help because even with financial aid, I'm worried about how I'll pay for everything and still send money home to help my mom and sister.`
+            },
+            'profile2': {
+                name: 'Alex Chen',
+                academic: `My current GPA is 3.3. I take a mix of regular and honors classes - I'm in Honors Chemistry and Honors History this year. I got a 1240 on the SAT. Math and science are my stronger subjects. I missed a lot of school in 10th grade due to some health issues (I had pretty bad asthma that required hospitalization a couple times), which affected my grades that year, but I've been doing better since then. I'm thinking about majoring in environmental science or maybe biology.`,
+                extracurriculars: `I'm part of our school's Environmental Club - I'm not the president or anything, but I've been a member for three years. We do small projects like organizing recycling drives and planting trees around the school. I also tutor middle school students in math twice a week through our library's free tutoring program. It's not official or anything, I just show up and help kids with their homework. Last year I started a small community garden in an empty lot near my apartment with a few neighbors. We grow vegetables and donate most of what we harvest to the local senior center. I'm also in Science Olympiad, though our team isn't super competitive - we just go to regionals and usually don't place.`,
+                achievements: `Our Environmental Club project to reduce plastic waste in the cafeteria actually worked - the school switched to compostable trays because of our presentation to the principal. The community garden I helped start now has like 15 families participating, which is cool. I placed 5th in the regional Science Olympiad in the ecology category once. One of the middle school kids I tutor improved from a D to a B in math, and his mom sent me a really nice thank-you note. That felt good.`,
+                challenges: `I have asthma that was pretty serious in 10th grade - I was hospitalized twice and missed almost a month of school total. It was scary and I fell behind academically. I had to work really hard to catch up and my GPA from that year still brings down my overall average. My family doesn't have a lot of money (my dad drives a bus and my mom works at a grocery store), so I can't afford expensive equipment for science projects or field trips. I've had to get creative - like using materials from the dollar store for experiments. Also, English is my parents' second language, so they can't really help me with homework or understanding college applications. I've had to figure most of this stuff out on my own.`,
+                goals: `I want to study environmental science because I care about climate change and think we need more people working on solutions. Eventually, I'd like to work for the EPA or maybe a nonprofit that focuses on environmental justice in low-income communities like mine. I've noticed that our neighborhood has worse air quality than richer areas, and I want to help fix problems like that. Getting a college education would make me the first in my family to graduate from a four-year university, which would mean a lot to my parents. This scholarship would help me focus on my studies instead of having to work full-time while in school.`
+            },
+            'profile3': {
+                name: 'Riley Thompson',
+                academic: `I have a 2.9 GPA. I know that's not great, but I work really hard for it. I take regular level classes mostly. I got a 1050 on my SAT the first time, then studied with free online materials and brought it up to 1120. School has always been challenging for me - I have to study longer than most people to understand things. I work at my family's small restaurant (my parents own a diner) about 25-30 hours per week, usually evenings and weekends, which makes it tough to keep up with homework. I want to study hospitality management or business when I go to college.`,
+                extracurriculars: `Most of my time outside school is spent working at my family's restaurant. I started just washing dishes in 9th grade, but now I do a lot more - taking orders, managing inventory, even covering when the manager is sick. It's not glamorous, but I've learned a lot about running a small business. I'm also part of our school's DECA chapter (business club). I participated in a regional competition for restaurant management and didn't place, but I learned a lot. On Sundays, I volunteer at our church helping with their breakfast program for people experiencing homelessness - I've done that pretty consistently for two years, maybe 100 hours total. I cook and serve food, clean up, and sometimes just talk with people.`,
+                achievements: `At the restaurant, my parents trust me enough now to close up by myself and handle the money. I also created a new inventory system that saved us from over-ordering supplies - my dad said it probably saves us $200 a month. The church volunteer coordinator asked me to help organize the schedule for other volunteers because I'm so reliable. I'm proud that I brought my GPA up from a 2.6 in freshman year to a 2.9 now - that might not sound like much, but it took a lot of work. I also haven't missed a single day of work at the restaurant in over a year.`,
+                challenges: `I work 25-30 hours a week at my family's restaurant because they need the help and honestly can't afford to hire another employee. This means I often do homework after 10pm when I get home, and I'm tired a lot. My GPA reflects that - I know I'm capable of more, but time is really limited. My parents immigrated here and built their business from nothing, so I feel obligated to help them, but it definitely impacts my grades. We also can't afford college application fees or test prep, so I've had to apply for fee waivers. School doesn't come naturally to me - I work twice as hard as some of my friends to get half the grade, which can be frustrating. Being a first-generation college student, I don't have anyone at home who can guide me through this process.`,
+                goals: `I want to get a degree in hospitality management or business administration so I can either help my parents expand their restaurant or start my own business someday. I've learned so much working at the diner - about customer service, managing employees, controlling costs - and I want to formalize that knowledge with a degree. I also want to prove to myself that I can succeed in college even though school has always been hard for me. If I can graduate from college, I'll be the first person in my extended family to do so, which would make my parents incredibly proud. This scholarship would allow me to reduce my work hours and focus more on my studies, which I think would really help my academic performance.`
+            }
+        };
+
+        // Current test data context
+        let currentTestDataType = null;
 
         // Tab switching
         function switchTab(tabName) {
@@ -863,6 +1527,24 @@
 
         // Handler for scholarship analysis
         window.Poe.registerHandler?.("scholarship-analysis", (result, context) => {
+            console.log("scholarship-analysis handler called:", result);
+
+            if (!result) {
+                console.error("No result received");
+                return;
+            }
+
+            // When openChat: true, responses might be empty but we can check result.status
+            if (result.status === "complete" && (!result.responses || result.responses.length === 0)) {
+                console.log("Complete with empty responses - likely displayed in chat only");
+                resetButton('analyzeBtn', '🔍 Analyze Organization');
+                return;
+            }
+
+            if (!result.responses || result.responses.length === 0) {
+                return; // Still processing
+            }
+
             const msg = result.responses[0];
 
             if (msg.status === "error") {
@@ -876,6 +1558,11 @@
 
         // Handler for value extraction
         window.Poe.registerHandler?.("value-extraction", (result, context) => {
+            if (!result || !result.responses || result.responses.length === 0) {
+                console.error("Invalid result structure:", result);
+                return;
+            }
+
             const msg = result.responses[0];
 
             if (msg.status === "error") {
@@ -892,6 +1579,11 @@
 
         // Handler for reframing verification
         window.Poe.registerHandler?.("reframing-verification", (result, context) => {
+            if (!result || !result.responses || result.responses.length === 0) {
+                console.error("Invalid result structure:", result);
+                return;
+            }
+
             const msg = result.responses[0];
 
             if (msg.status === "error") {
@@ -903,6 +1595,11 @@
 
         // Handler for essay generation
         window.Poe.registerHandler?.("essay-generation", (result, context) => {
+            if (!result || !result.responses || result.responses.length === 0) {
+                console.error("Invalid result structure:", result);
+                return;
+            }
+
             const msg = result.responses[0];
 
             if (msg.status === "error") {
@@ -919,6 +1616,11 @@
 
         // Handler for comparison generation
         window.Poe.registerHandler?.("comparison-generation", (result, context) => {
+            if (!result || !result.responses || result.responses.length === 0) {
+                console.error("Invalid result structure:", result);
+                return;
+            }
+
             const msg = result.responses[0];
 
             if (msg.status === "error") {
@@ -932,8 +1634,65 @@
             }
         });
 
+        // Handler for refinement chat
+        window.Poe.registerHandler?.("refinement-chat", (result, context) => {
+            if (!result || !result.responses || result.responses.length === 0) {
+                return;
+            }
+
+            const msg = result.responses[0];
+
+            if (msg.status === "error") {
+                addChatMessage('claude', `Error: ${msg.statusText}`, true);
+                chatState.isWaitingForResponse = false;
+                updateChatUI();
+            } else if (msg.status === "incomplete") {
+                // Stream the message
+                updateStreamingChatMessage(msg.content);
+            } else if (msg.status === "complete") {
+                // Finalize the message
+                finalizeChatMessage(msg.content);
+                chatState.conversationHistory.push({
+                    role: 'assistant',
+                    content: msg.content
+                });
+                chatState.isWaitingForResponse = false;
+                updateChatUI();
+            }
+        });
+
         // Phase 1: Analyze Scholarship
         async function analyzeScholarship() {
+            // Check if analysis was already completed
+            if (appState.completed.scholarshipAnalysis) {
+                showReAnalysisConfirmation();
+                return;
+            }
+
+            runScholarshipAnalysis();
+        }
+
+        function showReAnalysisConfirmation() {
+            const modal = document.getElementById('verificationModal');
+            document.getElementById('modalMessage').innerHTML = `
+                <p><strong>You've already completed an organizational analysis.</strong></p>
+                <p style="margin-top: 1rem;">Running this again will:</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li>Use additional API credits</li>
+                    <li>Take several minutes to complete</li>
+                    <li>Overwrite your current analysis</li>
+                </ul>
+                <p style="margin-top: 1rem;">Are you sure you want to re-analyze?</p>
+            `;
+            document.getElementById('modalConfirmBtn').onclick = () => {
+                closeModal();
+                runScholarshipAnalysis();
+            };
+            document.getElementById('modalConfirmBtn').textContent = 'Yes, Re-analyze';
+            modal.classList.add('active');
+        }
+
+        async function runScholarshipAnalysis() {
             const scholarshipName = document.getElementById('scholarshipName').value;
             const organizationName = document.getElementById('organizationName').value;
             const description = document.getElementById('scholarshipDescription').value;
@@ -992,10 +1751,11 @@ Use web search to gather real, current information. Provide specific examples, q
 Format your response with clear sections and actionable messaging recommendations.`;
 
             try {
-                await window.Poe.sendUserMessage(prompt, {
+                const budget = settings.thinkingBudgets.scholarshipAnalysis;
+                await window.Poe.sendUserMessage(`@Claude-Sonnet-4.5 ${prompt} --web_search True --thinking_budget ${budget}`, {
                     handler: "scholarship-analysis",
                     stream: false,
-                    openChat: false,
+                    openChat: true,
                     handlerContext: {}
                 });
             } catch (err) {
@@ -1006,6 +1766,7 @@ Format your response with clear sections and actionable messaging recommendation
 
         function processScholarshipAnalysis(content) {
             appState.organizationalIntel = content;
+            appState.completed.scholarshipAnalysis = true;
 
             // Parse and display results
             const sections = parseAnalysisContent(content);
@@ -1023,7 +1784,48 @@ Format your response with clear sections and actionable messaging recommendation
 
             document.getElementById('intelligenceResults').style.display = 'block';
 
+            // Show success banner
+            showSuccessBanner();
+
+            // Update button
+            updateAnalyzeButton();
+
+            // Mark tab as completed
+            markTabCompleted('intelligence');
+
             updateGeneratorPrerequisites();
+        }
+
+        function showSuccessBanner() {
+            const banner = document.getElementById('scholarshipSuccessBanner');
+            banner.innerHTML = `
+                <div class="success-banner">
+                    <div class="success-banner-content">
+                        <div class="success-banner-title">✅ Step 1 Complete: Organizational Intelligence</div>
+                        <div class="success-banner-subtitle">Next: Build your authentic student profile to unlock strategic positioning</div>
+                    </div>
+                    <button class="btn btn-primary" onclick="switchTab('student')" style="white-space: nowrap;">
+                        Continue to Student Profile →
+                    </button>
+                </div>
+            `;
+            banner.style.display = 'block';
+        }
+
+        function updateAnalyzeButton() {
+            const btn = document.getElementById('analyzeBtn');
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-secondary');
+            document.getElementById('analyzeBtnText').textContent = '✓ Analysis Complete - Re-analyze?';
+        }
+
+        function markTabCompleted(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                if (tab.getAttribute('onclick').includes(tabName)) {
+                    tab.classList.add('completed');
+                }
+            });
         }
 
         // Phase 2: Extract Student Value
@@ -1090,10 +1892,11 @@ Be specific, authentic, and focus on real value. Do NOT fabricate or exaggerate 
 Format clearly with sections for each identified strength.`;
 
             try {
-                await window.Poe.sendUserMessage(`@Claude-Sonnet-4.5 ${prompt}`, {
+                const budget = settings.thinkingBudgets.valueExtraction;
+                await window.Poe.sendUserMessage(`@Claude-Sonnet-4.5 ${prompt} --thinking_budget ${budget}`, {
                     handler: "value-extraction",
                     stream: true,
-                    openChat: false,
+                    openChat: true,
                     handlerContext: {}
                 });
             } catch (err) {
@@ -1149,23 +1952,36 @@ Format clearly with sections for each identified strength.`;
             document.getElementById('step3').classList.add('active');
 
             appState.verifiedStrengths = document.getElementById('hiddenValueContent').textContent;
+            appState.completed.studentProfile = true;
 
             document.getElementById('studentStep2').style.display = 'none';
             document.getElementById('studentStep3').style.display = 'block';
 
-            // Create summary
+            // Create summary with next step banner
             const summary = `
+                <div class="success-banner" style="margin-bottom: 1.5rem;">
+                    <div class="success-banner-content">
+                        <div class="success-banner-title">✅ Step 2 Complete: Student Profile Verified</div>
+                        <div class="success-banner-subtitle">Next: Generate your strategically tailored scholarship essay</div>
+                    </div>
+                    <button class="btn btn-primary" onclick="switchTab('generator')" style="white-space: nowrap;">
+                        Continue to Essay Generator →
+                    </button>
+                </div>
                 <p><strong>Profile Verified:</strong> Your authentic strengths have been identified and confirmed.</p>
                 <p style="margin-top: 1rem;">You're now ready to generate strategically tailored scholarship essays that emphasize the right aspects of your profile for specific opportunities.</p>
                 <div class="badge badge-success" style="margin-top: 1rem;">Profile Complete ✓</div>
             `;
             document.getElementById('profileSummary').innerHTML = summary;
 
+            // Mark tab as completed
+            markTabCompleted('student');
+
             updateGeneratorPrerequisites();
         }
 
         function requestRevisions() {
-            showCustomAlert('Please provide specific feedback about what needs to be revised, then click "Discover Hidden Value" again with updated information.');
+            openRefinementChat();
         }
 
         // Phase 3: Generate Essay
@@ -1233,10 +2049,11 @@ After the essay, provide a "STRATEGIC RATIONALE" section explaining:
 Write naturally, compellingly, and authentically.`;
 
             try {
-                await window.Poe.sendUserMessage(`@Claude-Sonnet-4.5 ${prompt}`, {
+                const budget = settings.thinkingBudgets.essayGeneration;
+                await window.Poe.sendUserMessage(`@Claude-Sonnet-4.5 ${prompt} --thinking_budget ${budget}`, {
                     handler: "essay-generation",
                     stream: true,
-                    openChat: false,
+                    openChat: true,
                     handlerContext: {}
                 });
             } catch (err) {
@@ -1247,6 +2064,7 @@ Write naturally, compellingly, and authentically.`;
 
         function processEssayGeneration(content) {
             appState.generatedEssay = content;
+            appState.completed.essayGeneration = true;
 
             // Split essay and rationale
             const parts = content.split(/STRATEGIC RATIONALE|Strategic Rationale/i);
@@ -1260,6 +2078,29 @@ Write naturally, compellingly, and authentically.`;
             }
 
             document.getElementById('essayResults').style.display = 'block';
+
+            // Add success banner after essay results
+            const successBanner = `
+                <div class="success-banner" style="margin-top: 1.5rem;">
+                    <div class="success-banner-content">
+                        <div class="success-banner-title">✅ Step 3 Complete: Tailored Essay Generated</div>
+                        <div class="success-banner-subtitle">Next: See how strategic positioning improves your application</div>
+                    </div>
+                    <button class="btn btn-primary" onclick="switchTab('comparison')" style="white-space: nowrap;">
+                        View Comparative Analysis →
+                    </button>
+                </div>
+            `;
+
+            // Insert banner after rationale
+            const rationaleBox = document.getElementById('rationaleContent').parentElement;
+            if (rationaleBox) {
+                rationaleBox.insertAdjacentHTML('afterend', successBanner);
+            }
+
+            // Mark tab as completed
+            markTabCompleted('generator');
+
             updateComparisonPrerequisites();
         }
 
@@ -1289,7 +2130,7 @@ ${appState.essayPrompt}
 **STUDENT PROFILE (summary):**
 ${appState.studentProfile.academic.substring(0, 200)}...
 
-**OPTIMIZED ESSAY (generated by ScholarshipIQ):**
+**OPTIMIZED ESSAY (generated by QuillCoach):**
 ${appState.generatedEssay}
 
 **TASK:**
@@ -1300,7 +2141,7 @@ ${appState.generatedEssay}
    - Missing strategic positioning
    - About 250-300 words
 
-2. Create an "OPTIMIZED VERSION EXCERPT" - key paragraph(s) from the ScholarshipIQ essay showing strategic positioning (250-300 words)
+2. Create an "OPTIMIZED VERSION EXCERPT" - key paragraph(s) from the QuillCoach essay showing strategic positioning (250-300 words)
 
 3. List "KEY IMPROVEMENTS" - specific differences:
    - Strategic alignment with organizational trajectory
@@ -1325,10 +2166,11 @@ SUCCESS PROBABILITY ASSESSMENT:
 [analysis]`;
 
             try {
-                await window.Poe.sendUserMessage(`@Claude-Sonnet-4.5 ${prompt}`, {
+                const budget = settings.thinkingBudgets.comparison;
+                await window.Poe.sendUserMessage(`@Claude-Sonnet-4.5 ${prompt} --thinking_budget ${budget}`, {
                     handler: "comparison-generation",
                     stream: false,
-                    openChat: false,
+                    openChat: true,
                     handlerContext: {}
                 });
             } catch (err) {
@@ -1338,6 +2180,8 @@ SUCCESS PROBABILITY ASSESSMENT:
         }
 
         function processComparison(content) {
+            appState.completed.comparison = true;
+
             // Parse the comparison content
             const sections = parseComparisonContent(content);
 
@@ -1347,6 +2191,24 @@ SUCCESS PROBABILITY ASSESSMENT:
             document.getElementById('assessmentContent').innerHTML = formatContent(sections.assessment);
 
             document.getElementById('comparisonResults').style.display = 'block';
+
+            // Add final success banner
+            const successBanner = `
+                <div class="success-banner" style="margin-top: 2rem;">
+                    <div class="success-banner-content">
+                        <div class="success-banner-title">✅ All Steps Complete!</div>
+                        <div class="success-banner-subtitle">You've completed the full QuillCoach workflow. Your strategic scholarship application is ready!</div>
+                    </div>
+                </div>
+            `;
+
+            const assessmentBox = document.getElementById('assessmentContent').parentElement;
+            if (assessmentBox) {
+                assessmentBox.insertAdjacentHTML('afterend', successBanner);
+            }
+
+            // Mark tab as completed
+            markTabCompleted('comparison');
         }
 
         // Utility Functions
@@ -1473,7 +2335,480 @@ SUCCESS PROBABILITY ASSESSMENT:
                 closeModal();
             }
         });
+
+        // Test Data Functions
+        function openTestDataModal(type) {
+            currentTestDataType = type;
+            const select = document.getElementById('testDataSelect');
+            const description = document.getElementById('testDataDescription');
+
+            // Clear existing options
+            select.innerHTML = '<option value="">-- Select an example --</option>';
+
+            if (type === 'scholarship') {
+                description.innerHTML = '<strong>Load Real Scholarship Data:</strong> Select from real scholarship programs with actual eligibility criteria and organizational information.';
+                select.innerHTML += '<option value="dell">Dell Scholars Program (Overcoming Obstacles)</option>';
+                select.innerHTML += '<option value="cocacola">Coca-Cola Scholars (Leadership & Service)</option>';
+                select.innerHTML += '<option value="cooke">Jack Kent Cooke Foundation (High Achievement + Need)</option>';
+            } else if (type === 'student') {
+                description.innerHTML = '<strong>Load Fictional Student Profile:</strong> These are completely fictional but realistic student examples designed to showcase QuillCoach\'s value extraction capabilities.';
+                select.innerHTML += '<option value="profile1">Jordan Martinez (Working Student, 3.1 GPA)</option>';
+                select.innerHTML += '<option value="profile2">Alex Chen (Health Challenges, 3.3 GPA)</option>';
+                select.innerHTML += '<option value="profile3">Riley Thompson (Family Business, 2.9 GPA)</option>';
+            }
+
+            document.getElementById('testDataModal').classList.add('active');
+        }
+
+        function closeTestDataModal() {
+            document.getElementById('testDataModal').classList.remove('active');
+            currentTestDataType = null;
+        }
+
+        function loadSelectedTestData() {
+            const select = document.getElementById('testDataSelect');
+            const selectedValue = select.value;
+
+            if (!selectedValue) {
+                showCustomAlert('Please select an example from the dropdown.');
+                return;
+            }
+
+            if (currentTestDataType === 'scholarship') {
+                const data = scholarshipTestData[selectedValue];
+                document.getElementById('scholarshipName').value = data.name;
+                document.getElementById('organizationName').value = data.organization;
+                document.getElementById('scholarshipDescription').value = data.description;
+                document.getElementById('scholarshipUrl').value = data.url;
+            } else if (currentTestDataType === 'student') {
+                const data = studentTestData[selectedValue];
+                document.getElementById('studentName').value = data.name;
+                document.getElementById('academicInfo').value = data.academic;
+                document.getElementById('extracurriculars').value = data.extracurriculars;
+                document.getElementById('achievements').value = data.achievements;
+                document.getElementById('challenges').value = data.challenges;
+                document.getElementById('goals').value = data.goals;
+            }
+
+            closeTestDataModal();
+        }
+
+        // Close test data modal on outside click
+        document.getElementById('testDataModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTestDataModal();
+            }
+        });
+
+        // Settings Modal Functions
+        function openSettings() {
+            // Populate current values
+            document.getElementById('budgetScholarship').value = settings.thinkingBudgets.scholarshipAnalysis;
+            document.getElementById('budgetScholarshipNum').value = settings.thinkingBudgets.scholarshipAnalysis;
+
+            document.getElementById('budgetValue').value = settings.thinkingBudgets.valueExtraction;
+            document.getElementById('budgetValueNum').value = settings.thinkingBudgets.valueExtraction;
+
+            document.getElementById('budgetEssay').value = settings.thinkingBudgets.essayGeneration;
+            document.getElementById('budgetEssayNum').value = settings.thinkingBudgets.essayGeneration;
+
+            document.getElementById('budgetComparison').value = settings.thinkingBudgets.comparison;
+            document.getElementById('budgetComparisonNum').value = settings.thinkingBudgets.comparison;
+
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        function updateBudgetDisplay(type, value) {
+            const numInput = document.getElementById(`budget${type.charAt(0).toUpperCase() + type.slice(1).replace(/([A-Z])/g, (match, p1, offset) => offset > 0 ? p1 : p1)}Num`);
+            if (type === 'scholarshipAnalysis') {
+                document.getElementById('budgetScholarshipNum').value = value;
+            } else if (type === 'valueExtraction') {
+                document.getElementById('budgetValueNum').value = value;
+            } else if (type === 'essayGeneration') {
+                document.getElementById('budgetEssayNum').value = value;
+            } else if (type === 'comparison') {
+                document.getElementById('budgetComparisonNum').value = value;
+            }
+        }
+
+        function updateBudgetSlider(type, value) {
+            if (type === 'scholarshipAnalysis') {
+                document.getElementById('budgetScholarship').value = value;
+            } else if (type === 'valueExtraction') {
+                document.getElementById('budgetValue').value = value;
+            } else if (type === 'essayGeneration') {
+                document.getElementById('budgetEssay').value = value;
+            } else if (type === 'comparison') {
+                document.getElementById('budgetComparison').value = value;
+            }
+        }
+
+        function saveSettingsModal() {
+            settings.thinkingBudgets.scholarshipAnalysis = parseInt(document.getElementById('budgetScholarship').value);
+            settings.thinkingBudgets.valueExtraction = parseInt(document.getElementById('budgetValue').value);
+            settings.thinkingBudgets.essayGeneration = parseInt(document.getElementById('budgetEssay').value);
+            settings.thinkingBudgets.comparison = parseInt(document.getElementById('budgetComparison').value);
+
+            document.getElementById('settingsModal').classList.remove('active');
+            showCustomAlert('Settings saved! Changes will apply to your next API calls.');
+        }
+
+        function resetSettings() {
+            settings.thinkingBudgets = {
+                scholarshipAnalysis: 8192,
+                valueExtraction: 8192,
+                essayGeneration: 16384,
+                comparison: 4096
+            };
+
+            // Update UI
+            document.getElementById('budgetScholarship').value = 8192;
+            document.getElementById('budgetScholarshipNum').value = 8192;
+            document.getElementById('budgetValue').value = 8192;
+            document.getElementById('budgetValueNum').value = 8192;
+            document.getElementById('budgetEssay').value = 16384;
+            document.getElementById('budgetEssayNum').value = 16384;
+            document.getElementById('budgetComparison').value = 4096;
+            document.getElementById('budgetComparisonNum').value = 4096;
+        }
+
+        // Close settings modal on outside click
+        document.getElementById('settingsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                document.getElementById('settingsModal').classList.remove('active');
+            }
+        });
+
+        // Refinement Chat Functions
+        function openRefinementChat() {
+            // Store current analysis
+            chatState.currentAnalysis = document.getElementById('hiddenValueContent').innerHTML;
+            chatState.conversationHistory = [];
+            chatState.isWaitingForResponse = false;
+
+            // Show reference analysis
+            document.getElementById('chatReferenceAnalysis').innerHTML = chatState.currentAnalysis;
+
+            // Clear chat messages
+            document.getElementById('chatMessages').innerHTML = '';
+
+            // Open panel
+            document.getElementById('chatOverlay').classList.add('active');
+            document.getElementById('refinementChatPanel').classList.add('open');
+
+            // Send initial greeting
+            sendInitialGreeting();
+        }
+
+        function closeRefinementChat() {
+            document.getElementById('chatOverlay').classList.remove('active');
+            document.getElementById('refinementChatPanel').classList.remove('open');
+        }
+
+        async function sendInitialGreeting() {
+            chatState.isWaitingForResponse = true;
+            updateChatUI();
+
+            const budget = settings.thinkingBudgets.valueExtraction;
+            const prompt = `I'm helping refine a student profile analysis for a scholarship application. Here's the current analysis:
+
+${chatState.currentAnalysis}
+
+Please greet the student warmly and let them know you're here to help refine this analysis. They might want to:
+1. Add additional context or details you missed
+2. Correct any interpretations that aren't quite right
+3. Clarify anything that needs more accuracy
+
+Ask them what they'd like to refine or add.`;
+
+            try {
+                await window.Poe.sendUserMessage(`@Claude-Sonnet-4.5 ${prompt} --thinking_budget ${budget}`, {
+                    handler: "refinement-chat",
+                    stream: true,
+                    openChat: true,
+                    handlerContext: {}
+                });
+            } catch (err) {
+                addChatMessage('claude', `Error: ${err.message}`, true);
+                chatState.isWaitingForResponse = false;
+                updateChatUI();
+            }
+        }
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+
+            if (!message || chatState.isWaitingForResponse) return;
+
+            // Add user message to UI and history
+            addChatMessage('user', message, true);
+            chatState.conversationHistory.push({
+                role: 'user',
+                content: message
+            });
+
+            // Clear input
+            input.value = '';
+            input.style.height = 'auto';
+
+            // Set waiting state
+            chatState.isWaitingForResponse = true;
+            updateChatUI();
+
+            // Build conversation context
+            let conversationContext = `Previous conversation:\n\n`;
+            chatState.conversationHistory.forEach(msg => {
+                conversationContext += `${msg.role === 'user' ? 'Student' : 'Claude'}: ${msg.content}\n\n`;
+            });
+
+            const budget = settings.thinkingBudgets.valueExtraction;
+
+            try {
+                await window.Poe.sendUserMessage(`@Claude-Sonnet-4.5 ${conversationContext} --thinking_budget ${budget}`, {
+                    handler: "refinement-chat",
+                    stream: true,
+                    openChat: true,
+                    handlerContext: {}
+                });
+            } catch (err) {
+                addChatMessage('claude', `Error: ${err.message}`, true);
+                chatState.isWaitingForResponse = false;
+                updateChatUI();
+            }
+        }
+
+        function addChatMessage(sender, content, finalized) {
+            const messagesContainer = document.getElementById('chatMessages');
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}`;
+            messageDiv.id = finalized ? '' : 'streamingMessage';
+
+            const avatar = document.createElement('div');
+            avatar.className = `chat-avatar ${sender}`;
+            avatar.textContent = sender === 'claude' ? '🤖' : '👤';
+
+            const bubble = document.createElement('div');
+            bubble.className = 'chat-bubble';
+
+            if (finalized) {
+                bubble.innerHTML = formatContent(content);
+            } else {
+                bubble.innerHTML = formatContent(content);
+            }
+
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(bubble);
+
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function updateStreamingChatMessage(content) {
+            let streamingMsg = document.getElementById('streamingMessage');
+
+            if (!streamingMsg) {
+                // Create new streaming message
+                addChatMessage('claude', content, false);
+            } else {
+                // Update existing streaming message
+                const bubble = streamingMsg.querySelector('.chat-bubble');
+                bubble.innerHTML = formatContent(content);
+                document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+            }
+        }
+
+        function finalizeChatMessage(content) {
+            const streamingMsg = document.getElementById('streamingMessage');
+            if (streamingMsg) {
+                streamingMsg.id = ''; // Remove streaming ID
+                const bubble = streamingMsg.querySelector('.chat-bubble');
+                bubble.innerHTML = formatContent(content);
+            }
+        }
+
+        function updateChatUI() {
+            const sendBtn = document.getElementById('chatSendBtn');
+            const input = document.getElementById('chatInput');
+
+            sendBtn.disabled = chatState.isWaitingForResponse;
+            input.disabled = chatState.isWaitingForResponse;
+
+            if (chatState.isWaitingForResponse) {
+                // Show typing indicator
+                const messagesContainer = document.getElementById('chatMessages');
+                let typingIndicator = document.getElementById('typingIndicator');
+
+                if (!typingIndicator) {
+                    const typingDiv = document.createElement('div');
+                    typingDiv.className = 'chat-message claude';
+                    typingDiv.id = 'typingIndicator';
+
+                    const avatar = document.createElement('div');
+                    avatar.className = 'chat-avatar claude';
+                    avatar.textContent = '🤖';
+
+                    const bubble = document.createElement('div');
+                    bubble.className = 'chat-bubble';
+                    bubble.innerHTML = '<div class="chat-typing"><span></span><span></span><span></span></div>';
+
+                    typingDiv.appendChild(avatar);
+                    typingDiv.appendChild(bubble);
+                    messagesContainer.appendChild(typingDiv);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            } else {
+                // Remove typing indicator
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+        }
+
+        async function applyRefinedAnalysis() {
+            if (chatState.conversationHistory.length === 0) {
+                showCustomAlert('Please have a conversation first before applying changes.');
+                return;
+            }
+
+            chatState.isWaitingForResponse = true;
+            updateChatUI();
+
+            // Build full conversation
+            let conversationContext = `Based on the following conversation, provide an updated student profile analysis that incorporates all the clarifications, corrections, and additional context discussed.\n\n`;
+
+            conversationContext += `Original analysis:\n${chatState.currentAnalysis}\n\n`;
+
+            conversationContext += `Conversation:\n`;
+            chatState.conversationHistory.forEach(msg => {
+                conversationContext += `${msg.role === 'user' ? 'Student' : 'Claude'}: ${msg.content}\n\n`;
+            });
+
+            conversationContext += `\n\nProvide the updated analysis with the same structure as before, incorporating all refinements from our conversation. Format clearly with sections for each identified strength.`;
+
+            const budget = settings.thinkingBudgets.valueExtraction;
+
+            try {
+                await window.Poe.sendUserMessage(`@Claude-Sonnet-4.5 ${conversationContext} --thinking_budget ${budget}`, {
+                    handler: "refinement-apply",
+                    stream: false,
+                    openChat: true,
+                    handlerContext: {}
+                });
+            } catch (err) {
+                showCustomAlert(`Error applying refinement: ${err.message}`);
+                chatState.isWaitingForResponse = false;
+                updateChatUI();
+            }
+        }
+
+        // Handler for applying refined analysis
+        window.Poe.registerHandler?.("refinement-apply", (result, context) => {
+            if (!result || !result.responses || result.responses.length === 0) {
+                return;
+            }
+
+            const msg = result.responses[0];
+
+            if (msg.status === "complete") {
+                // Update the analysis
+                document.getElementById('hiddenValueContent').innerHTML = formatContent(msg.content);
+                closeRefinementChat();
+                showCustomAlert('✅ Analysis updated successfully with your refinements!');
+            } else if (msg.status === "error") {
+                showCustomAlert(`Error: ${msg.statusText}`);
+                chatState.isWaitingForResponse = false;
+                updateChatUI();
+            }
+        });
+
+        // Handle Enter key in chat input
+        document.getElementById('chatInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendChatMessage();
+            }
+        });
+
+        // Auto-resize chat input
+        document.getElementById('chatInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Essay Prompt Modal Functions
+        function openPromptModal() {
+            const select = document.getElementById('promptSelect');
+            select.innerHTML = '<option value="">-- Choose a sample prompt --</option>';
+
+            // Populate with all prompts from all scholarships
+            Object.keys(scholarshipTestData).forEach(key => {
+                const scholarship = scholarshipTestData[key];
+                if (scholarship.samplePrompts) {
+                    scholarship.samplePrompts.forEach((promptData, index) => {
+                        const option = document.createElement('option');
+                        option.value = `${key}-${index}`;
+                        option.textContent = `${scholarship.name} - Prompt ${index + 1}`;
+                        select.appendChild(option);
+                    });
+                }
+            });
+
+            document.getElementById('promptPreview').style.display = 'none';
+            document.getElementById('promptModal').classList.add('active');
+        }
+
+        function closePromptModal() {
+            document.getElementById('promptModal').classList.remove('active');
+        }
+
+        function updatePromptPreview() {
+            const select = document.getElementById('promptSelect');
+            const value = select.value;
+
+            if (!value) {
+                document.getElementById('promptPreview').style.display = 'none';
+                return;
+            }
+
+            const [scholarshipKey, promptIndex] = value.split('-');
+            const scholarship = scholarshipTestData[scholarshipKey];
+            const promptData = scholarship.samplePrompts[parseInt(promptIndex)];
+
+            document.getElementById('promptPreviewText').textContent = promptData.prompt;
+            document.getElementById('promptPreviewLimit').textContent = `Word limit: ${promptData.wordLimit} words`;
+            document.getElementById('promptPreview').style.display = 'block';
+        }
+
+        function loadSelectedPrompt() {
+            const select = document.getElementById('promptSelect');
+            const value = select.value;
+
+            if (!value) {
+                showCustomAlert('Please select a prompt from the dropdown.');
+                return;
+            }
+
+            const [scholarshipKey, promptIndex] = value.split('-');
+            const scholarship = scholarshipTestData[scholarshipKey];
+            const promptData = scholarship.samplePrompts[parseInt(promptIndex)];
+
+            document.getElementById('essayPrompt').value = promptData.prompt;
+            document.getElementById('wordLimit').value = promptData.wordLimit;
+
+            closePromptModal();
+        }
+
+        // Close prompt modal on outside click
+        document.getElementById('promptModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePromptModal();
+            }
+        });
     </script>
 </body>
 </html>
+
 
